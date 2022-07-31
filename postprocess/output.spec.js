@@ -20,8 +20,8 @@ var createOutputBuffer = function () {
     }
 }
 
-describe('output', function () {
-    describe('junit', function () {
+describe('suite_1', function () {
+    describe('suite_1_1', function () {
         it('should generate empty junit when no results', function () {
             var buffer = createOutputBuffer();
             var handler = output.createJunit(buffer, {mocha: true, junit: 'test.junit'});
@@ -29,6 +29,7 @@ describe('output', function () {
             expect(buffer.cache).to.equal(
                 '<?xml version="1.0" encoding="UTF-8" ?>\n' + 
                 '<testsuites>\n</testsuites>\n');
+            console.log("suite_1_1 test 1");    
         })
 
         it('should indicate one pass there is one passing result', function () {
@@ -40,6 +41,7 @@ describe('output', function () {
             expect(buffer.cache).to.include(' tests="1" ');
             expect(buffer.cache).to.include(' failures="0" ');
             expect(buffer.cache).to.include(' errors="0" ');
+            console.log("suite_1_1 test 2");
         })
 
         it('should indicate one failure there is one failing result', function () {
@@ -52,6 +54,7 @@ describe('output', function () {
             expect(buffer.cache).to.include(' failures="1" ');
             expect(buffer.cache).to.include(' errors="0" ');
             expect(buffer.cache).to.include('fail message');
+            console.log("suite_1_1 test 3");
         })
 
         it('should indicate one error there is one failing error', function () {
@@ -64,15 +67,17 @@ describe('output', function () {
             expect(buffer.cache).to.include(' failures="0" ');
             expect(buffer.cache).to.include(' errors="1" ');
             expect(buffer.cache).to.include('error message');
+            console.log("suite_1_1 test 4");
         })
     })
 
-    describe('csv', function () {
+    describe('suite_1_2', function () {
         it('should generate only header if no results', function () {
             var buffer = createOutputBuffer();
             var handler = output.createCsv(buffer, { mocha: true, junit: 'test.csv' });
             handler.close();
             expect(buffer.cache).to.equal('');
+            console.log("suite_1_2 test 1");
         })
 
         it('should indicate one pass there is one passing result', function () {
@@ -81,15 +86,17 @@ describe('output', function () {
             handler.writeResult({status: 0}, {title:'myTitle', description: 'myDescription'}, 'key');
             handler.close();
             expect(buffer.cache).to.equal('category,title,description,resource,region,statusWord,message\n,myTitle,myDescription,N/A,Global,OK,\n');
+            console.log("suite_1_2 test 2");
         })
     })
 
-    describe('json', function () {
+    describe('suite_1_3', function () {
         it('should generate empty array if no results', function () {
             var buffer = createOutputBuffer();
             var handler = output.createJson(buffer, { mocha: true, junit: 'test.json' });
             handler.close();
             expect(buffer.cache).to.equal('[]');
+            console.log("suite_1_3 test 1");
         })
 
         it('should indicate one pass there is one passing result', function () {
@@ -98,10 +105,20 @@ describe('output', function () {
             handler.writeResult({ status: 0 }, { title: 'myTitle', description: 'myDescription' }, 'key');
             handler.close();
             expect(JSON.stringify(JSON.parse(buffer.cache))).to.equal('[{"plugin":"key","title":"myTitle","description":"myDescription","resource":"N/A","region":"Global","status":"OK"}]');
+            console.log("suite_1_3 test 2");
         })
     })
 
-    describe('create', function() {
+    it('Test 1 suite 1', function () {
+        var buffer = createOutputBuffer();
+        var handler = output.createJson(buffer, { mocha: true, junit: 'test.json' });
+        handler.writeResult({ status: 0 }, { title: 'myTitle', description: 'myDescription' }, 'key');
+        handler.close();
+        expect(JSON.stringify(JSON.parse(buffer.cache))).to.equal('[{"plugin":"key","title":"myTitle","description":"myDescription","resource":"N/A","region":"Global","status":"OK"}]');
+        console.log("Test 1 suite 1");
+    })
+
+    describe('suite_1_4', function() {
         it('should write to console without errors', function () {
             // Create with no arguments is valid and just says create the
             // default, which is console output.
@@ -115,6 +132,7 @@ describe('output', function () {
             handler.close();
             // No expect here because in the current structure, we cannot
             // capture the standard output
+            console.log("suite_1_4 test 1");
         })
 
         it('should handle compliance sections without errors', function () {
@@ -130,6 +148,9 @@ describe('output', function () {
             handler.close();
             // No expect here because in the current structure, we cannot
             // capture the standard output
+            console.log("suite_1_4 test 2");
         })
     })
+
+    
 })
